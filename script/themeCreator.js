@@ -318,7 +318,7 @@ class UI{
         const self = this;
         self.codeBox.style.display = 'block';
         self.copyCodeButton.style.display = 'block';
-        self.codeBox.innerHTML = firstPattern.toString() + titlePattern("Blog") + cssFirstTag;
+        self.codeBox.innerHTML = firstPattern.toString() + titlePattern("&lt;data:view.title.escaped/&gt;") + cssFirstTag;
         self.codeBox.innerHTML += commentFirst + templateName + templateURL + author + commentLast;
         
         self.codeBox.innerHTML += blogPattern(blogWidth);
@@ -485,12 +485,16 @@ function randomCharacter(len){
 var newLine = "<br/>"
 var tab = ""; 
 var XMLpattern = "";
-var firstPattern = "&lt;!DOCTYPE html&gt;" + "<br/>" + "&lt;html&gt;" + "<br/>" + "&lt;head&gt;" + "<br/>" + "&lt;meta charset='utf-8'/&gt;" + newLine + tab;
+var firstPattern = "&lt;!DOCTYPE html&gt;" + "<br/>" + "&lt;html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateVersion='1.0.0' expr:class='data:blog.languageDirection' expr:dir='data:blog.languageDirection' expr:lang='data:blog.localeUnderscoreDelimited' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'&gt;" + "<br/>" + "&lt;head&gt;" + "<br/>" + "&lt;meta charset='utf-8'/&gt;" + newLine + tab;
 
 function titlePattern(titleN){
     return "&lt;title&gt;" + titleN + "&lt;/title&gt;";
 }
-var cssFirstTag = newLine + tab + "&lt;b:skin&gt;&lt;![CDATA[" + newLine + newLine + tab;
+var cssFirstTag = newLine + tab + "&lt;b:skin version='1.0.0'&gt;&lt;![CDATA[" + newLine + newLine + tab;
+var cssFirstTag = newLine + tab + '&lt;b:skin version="1.0.0"&gt;&lt;![CDATA[' + newLine + tab + '/* ' + newLine +  '&lt;!-- Variable definitions --&gt;' + newLine + '&lt;Variable name="keycolor" description="Main Color" type="color" default="#2196f3" value="#2196f3"/&gt;' + newLine + '*/' + newLine + newLine + tab;
+
+
+
 var commentFirst = "/* ---------------------------------" + newLine + tab;
 var commentLast = newLine + tab + "--------------------------------- */" + newLine + tab;
 function blogPattern(w){
@@ -503,13 +507,24 @@ var cssEndTag = newLine + tab + "]]&gt;&lt;/b:skin&gt;" + "<br/>";
 var headEndTag = "&lt;/head&gt;" + "<br/>";
 var bodyFirstTag = "&lt;body&gt;" + newLine + tab + "&lt;div class='container'>" + newLine + tab;
 function sectionPattern(idN, classN, maxWidgetN, showaddelementN, widgetCode){
-    if(widgetCode === "0" || widgetCode !== "1")
-        return tab + "&lt;div class='"+ classN +"-area'>" + "<br/>" + "&lt;b:section id='" + idN + "' class='" + classN + "' showaddelement='" + showaddelementN + "'/>" + newLine + tab + "&lt;/div&gt;";  
+    var sectionTag = tab + "&lt;div class='"+ classN +"-area'>" + "<br/>" + "&lt;b:section id='" + idN + "' class='" + classN + "' showaddelement='" + showaddelementN + "'>";
+    if(widgetCode === "0")
+        return sectionTag + newLine + tab + "&lt;/b:section>" + newLine + tab + "&lt;/div&gt;";  
     else if(widgetCode === "1")
-        return newLine + tab + "&lt;div class='"+ classN +"-area'>" + "<br/>" + "&lt;b:section id='" + idN + "' class='" + classN + "' showaddelement='" + showaddelementN + "'>" + newLine + tab + tab + main_widget + newLine + tab + "&lt;/b:section&gt;" + newLine + tab + "&lt;/div&gt;";  
+        return sectionTag + newLine + tab + tab + header_widget + newLine + tab + "&lt;/b:section>" + newLine + tab + "&lt;/div&gt;";
+	
+    else if(widgetCode === "2")
+        return sectionTag + newLine + tab + tab + search_widget + newLine + tab + "&lt;/b:section>" + newLine + tab + "&lt;/div&gt;";
+	
+    else
+        return sectionTag + newLine + tab + tab + main_widget + newLine + tab + "&lt;/b:section>" + newLine + tab + "&lt;/div&gt;";
 }
+
+
 var bodyEndTag = "&lt;/div><br/>" + "&lt;/body&gt;";
 var htmlEndTag = "<br/>" + "&lt;/html&gt;";
 
 // widget codes
+var header_widget = "&lt;b:widget id='Header1' title='(Header)' locked='true' type='Header' visible='true'/&gt;"
+var search_widget = "&lt;b:widget id='BlogSearch1' title='Search This Blog' locked='true' type='BlogSearch' visible='true'/&gt;"
 var main_widget = "&lt;b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog'/&gt;"
